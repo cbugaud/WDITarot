@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">WDITarot</string>
+
+    <string name="deal_taker">Preneur</string>
+    <string name="deal_bidding">Contrat</string>
+    <string name="action_settings">Settings</string>
+    <string name="deal_callee">Appel</string>
+    <string name="deal_bonuses">Annonces</string>
+    <string name="deal_lack">Misère</string>
+    <string name="deal_handful">Poignée</string>
+    <string name="attack">Attaque</string>
+    <string name="defense">Défense</string>
+</resources>
