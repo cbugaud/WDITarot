@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -19,66 +18,24 @@
         android:layout_height="wrap_content"
         android:text="@string/deal_taker"
         style="@android:style/TextAppearance.Medium"/>
-    <LinearLayout
+    <RadioGroup
         android:id="@+id/deal_taker_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/j1_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="J1"
-            />
-        <Button
-            android:id="@+id/j2_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="J2"
-            />
-    </LinearLayout>
+        android:orientation="horizontal" />
+
     <!-- Contrat -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/deal_bidding"
         style="@android:style/TextAppearance.Medium"/>
-    <LinearLayout
+    <RadioGroup
         android:id="@+id/deal_bids_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/prise_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Prise"
-            />
-        <Button
-            android:id="@+id/garde_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Garde"
-            />
-        <Button
-            android:id="@+id/garde_ss_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Garde Sans"
-            />
-        <Button
-            android:id="@+id/garde_c_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Garde Contre"
-            />
-    </LinearLayout>
+        android:orientation="horizontal" />
+
     <!-- Qui est appelé -->
     <TextView
         android:layout_width="match_parent"

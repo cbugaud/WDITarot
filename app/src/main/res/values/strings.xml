@@ -10,4 +10,8 @@
     <string name="deal_handful">Poignée</string>
     <string name="attack">Attaque</string>
     <string name="defense">Défense</string>
+    <string name="bid_take">Prise</string>
+    <string name="bid_guard">Garde</string>
+    <string name="bid_guard_without">Garde sans</string>
+    <string name="bid_guard_against">Garde contre</string>
 </resources>
