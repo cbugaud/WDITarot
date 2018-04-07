@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void newDeal(View view) {
-        startActivity(new Intent().setClass(view.getContext(), ShowScoresActivity.class));
+        startActivity(new Intent().setClass(view.getContext(), ChoosePlayersActivity.class));
     }
 
 //    @Override

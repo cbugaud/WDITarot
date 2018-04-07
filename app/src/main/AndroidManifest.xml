@@ -20,7 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".NewDealActivity" />
-        <activity android:name=".ShowScoresActivity"></activity>
+        <activity android:name=".ShowScoresActivity" />
+        <activity android:name=".ChoosePlayersActivity"></activity>
     </application>
 
 </manifest>

@@ -9,9 +9,8 @@ import android.view.View;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
-import com.google.common.collect.Lists;
-
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 import fr.cbug.wditarot.model.Deal;
@@ -21,14 +20,15 @@ import fr.cbug.wditarot.model.Player;
 public class ShowScoresActivity extends AppCompatActivity {
     public static final String PLAYERS_KEY = "players";
     public static final int ACT_NEWDEAL = 1;
-    private Game game = new Game(Lists.newArrayList(new Player("Erwan"),
-            new Player("Céline"), new Player("Julien"),
-            new Player("Simon"), new Player("Aude")));
+    private Game game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_scores);
+
+        game = new Game((List<Player>) getIntent().getSerializableExtra(PLAYERS_KEY));
+
         populateScoreGrid();
 
         FloatingActionButton fab = findViewById(R.id.new_deal_btn);

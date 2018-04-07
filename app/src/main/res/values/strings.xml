@@ -24,4 +24,8 @@
     <string name="deal_results">Résultats</string>
     <string name="deal_nb_oudlers">Nb bouts</string>
     <string name="deal_incomplete_data">Il manque des infos pour calculer les scores ...</string>
+    <string name="add">Ajouter</string>
+    <string name="validate">Valider</string>
+    <string name="players_empty_name">Un nom de joueur ne peut pas être vide</string>
+    <string name="players_dupplicate_name">Les noms des joueurs doivent être uniques</string>
 </resources>
