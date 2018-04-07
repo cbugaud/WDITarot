@@ -1,5 +1,6 @@
 package fr.cbug.wditarot;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,13 +29,16 @@ import fr.cbug.wditarot.model.Player;
 
 public class NewDealActivity extends AppCompatActivity {
     private static final String TAG = "newDealActivity";
-    private List<Player> players = Lists.newArrayList(new Player("Erwan"), new Player("Céline"), new Player("Julien"), new Player("Simon"), new Player("Aude"));
+    public static final String DEAL_KEY = "deal";
+    private List<Player> players;
     private PlayedDeal deal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_deal);
+
+        this.players = (List<Player>) getIntent().getSerializableExtra(ShowScoresActivity.PLAYERS_KEY);
 
         deal = new PlayedDeal();
         deal.setPlayers(players);
@@ -58,8 +62,13 @@ public class NewDealActivity extends AppCompatActivity {
                 results += score.getKey() + " : " + score.getValue() + "\n";
 
             Toast.makeText(this, results, Toast.LENGTH_LONG).show();
+
+            Intent intent = new Intent();
+            intent.putExtra(DEAL_KEY, deal);
+            setResult(RESULT_OK, intent);
+            finish();
         } else
-            Toast.makeText(this, R.string.deal_incomplete_data, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.deal_incomplete_data, Toast.LENGTH_SHORT).show();
     }
 
     private void generatePartnerButtons() {

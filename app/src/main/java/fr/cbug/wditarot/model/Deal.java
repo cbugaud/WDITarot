@@ -1,11 +1,13 @@
 package fr.cbug.wditarot.model;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Un tour de jeu = une distribution.
  */
-public abstract class Deal {
+public abstract class Deal implements Serializable {
     protected List<Player> players;
     protected Player dealer;
 
@@ -24,4 +26,6 @@ public abstract class Deal {
     public void setDealer(Player dealer) {
         this.dealer = dealer;
     }
+
+    public abstract Map<Player, Integer> getScores();
 }

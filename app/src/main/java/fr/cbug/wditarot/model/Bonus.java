@@ -1,11 +1,13 @@
 package fr.cbug.wditarot.model;
 
+import java.io.Serializable;
+
 /**
  * Les annonces (misère, poignées, ...
  */
-public class Bonus {
+public class Bonus implements Serializable {
     public enum BonusType {
-        LACK /** Misère */ (false, false, true, 10), // TODO : muoltiplier du contrat ?
+        LACK /** Misère */ (false, false, true, 10), // TODO : multiplier du contrat ?
         HANDFUL /** Poignée */ (true, true, false, 20),
         DOUBLE_HANDFUL /** Double poignée */ (true, true, false, 40),
         TRIPLE_HANDFUL /** Triple poignée */ (true, true, false, 60),

@@ -76,6 +76,12 @@ public class PlayedDeal extends Deal {
     }
 
     public Map<Player, Integer> getScores() {
+        if (scores == null) {
+            if (completeData())
+                computeRoundScore();
+            else
+                throw new IllegalStateException("Can't compute scores, data are not complete");
+        }
         return scores;
     }
 
