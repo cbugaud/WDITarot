@@ -26,7 +26,7 @@ public class PlayedDealTest {
         round.setTakerCardPoints(42);
         round.setTakerOudlersCount(2);
 
-        round.computeRoundScore();
+        round.computeDealScore();
 
         assertEquals(104, round.getScores().get(JULIEN).intValue());
         assertEquals(52, round.getScores().get(AUDE).intValue());
@@ -47,7 +47,7 @@ public class PlayedDealTest {
         round.setTakerCardPoints(42);
         round.setTakerOudlersCount(0);
 
-        round.computeRoundScore();
+        round.computeDealScore();
 
         assertEquals(-78, round.getScores().get(JULIEN).intValue());
         assertEquals(-39, round.getScores().get(AUDE).intValue());
@@ -68,7 +68,7 @@ public class PlayedDealTest {
         round.setTakerCardPoints(42);
         round.setTakerOudlersCount(1);
 
-        round.computeRoundScore();
+        round.computeDealScore();
 
         assertEquals(-544, round.getScores().get(SIMON).intValue());
         assertEquals(136, round.getScores().get(AUDE).intValue());
@@ -88,7 +88,7 @@ public class PlayedDealTest {
         round.setTakerCardPoints(42);
         round.setTakerOudlersCount(3);
 
-        round.computeRoundScore();
+        round.computeDealScore();
 
         assertEquals(186, round.getScores().get(JULIEN).intValue());
         assertEquals(-62, round.getScores().get(AUDE).intValue());
@@ -107,7 +107,7 @@ public class PlayedDealTest {
         round.setTakerCardPoints(50);
         round.setTakerOudlersCount(1);
 
-        round.computeRoundScore();
+        round.computeDealScore();
 
         assertEquals(-312, round.getScores().get(THILL).intValue());
         assertEquals(156, round.getScores().get(JULIEN).intValue());
@@ -127,7 +127,7 @@ public class PlayedDealTest {
         round.setTakerOudlersCount(2);
         round.getBonuses().add(new Bonus(Bonus.BonusType.ONE_AT_END, true));
 
-        round.computeRoundScore();
+        round.computeDealScore();
 
         assertEquals(144, round.getScores().get(JULIEN).intValue());
         assertEquals(72, round.getScores().get(AUDE).intValue());
@@ -149,11 +149,33 @@ public class PlayedDealTest {
         round.getBonuses().add(new Bonus(Bonus.BonusType.HANDFUL, true));
         round.getBonuses().add(new Bonus(Bonus.BonusType.ONE_AT_END, true));
 
-        round.computeRoundScore();
+        round.computeDealScore();
 
         assertEquals(-232, round.getScores().get(THILL).intValue());
         assertEquals(116, round.getScores().get(JULIEN).intValue());
         assertEquals(116, round.getScores().get(SIMON).intValue());
+
+        assertEquals(0, round.getScores().values().stream().mapToInt(Integer::intValue).sum());
+    }
+
+    @Test
+    public void computeRoundScore5PlayersWithLack() throws Exception {
+        PlayedDeal round = new PlayedDeal();
+        round.setPlayers(Lists.newArrayList(SIMON, THILL, JULIEN, AUDE, ERWAN));
+        round.setBid(Bid.GUARD);
+        round.setTaker(JULIEN);
+        round.setPartner(AUDE);
+        round.setTakerCardPoints(42);
+        round.setTakerOudlersCount(2);
+        round.getBonuses().add(new Bonus(Bonus.BonusType.LACK, ERWAN));
+
+        round.computeDealScore();
+
+        assertEquals(94, round.getScores().get(JULIEN).intValue());
+        assertEquals(42, round.getScores().get(AUDE).intValue());
+        assertEquals(-62, round.getScores().get(SIMON).intValue());
+        assertEquals(-62, round.getScores().get(THILL).intValue());
+        assertEquals(-12, round.getScores().get(ERWAN).intValue());
 
         assertEquals(0, round.getScores().values().stream().mapToInt(Integer::intValue).sum());
     }

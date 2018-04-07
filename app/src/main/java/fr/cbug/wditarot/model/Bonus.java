@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 public class Bonus implements Serializable {
     public enum BonusType {
-        LACK /** Misère */ (false, false, true, 10), // TODO : multiplier du contrat ?
+        LACK /** Misère */ (false, false, false, 10),
         HANDFUL /** Poignée */ (true, true, false, 20),
         DOUBLE_HANDFUL /** Double poignée */ (true, true, false, 40),
         TRIPLE_HANDFUL /** Triple poignée */ (true, true, false, 60),
@@ -56,7 +56,7 @@ public class Bonus implements Serializable {
 
     public Bonus(BonusType type, Player player) {
         this.type = type;
-        this.taker = taker;
+        this.player = player;
     }
 
     public BonusType getType() {
@@ -75,7 +75,7 @@ public class Bonus implements Serializable {
         return taker;
     }
 
-    public int getAddedScoreForTaker(boolean takerWins, int stakeMultiplier) {
+    public int getAddedScoreForTaker(boolean takerWins) {
         boolean bonusForTaker;
         if (type.isForWinnerTeam())
             bonusForTaker = takerWins;
@@ -85,9 +85,6 @@ public class Bonus implements Serializable {
         int result = type.getBonusScore();
         if (!bonusForTaker)
             result *= -1;
-
-        if (type.isMultiplierApplied())
-            result *= stakeMultiplier;
 
         return result;
     }

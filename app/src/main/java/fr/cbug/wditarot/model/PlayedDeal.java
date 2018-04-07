@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Un tour joué : quelqu'un a pris un contrat, appelé un roi, des annonces ont été faites, le score final a été calculé.
@@ -78,7 +77,7 @@ public class PlayedDeal extends Deal {
     public Map<Player, Integer> getScores() {
         if (scores == null) {
             if (completeData())
-                computeRoundScore();
+                computeDealScore();
             else
                 throw new IllegalStateException("Can't compute scores, data are not complete");
         }
@@ -94,7 +93,7 @@ public class PlayedDeal extends Deal {
                 && takerCardPoints >= 0;
     }
 
-    public void computeRoundScore() {
+    public void computeDealScore() {
         scores = new HashMap<>();
 
         int score = computeBaseScoreForTaker();
@@ -111,8 +110,7 @@ public class PlayedDeal extends Deal {
         for (Player player : defenseTeam)
             scores.put(player, score * -1);
 
-        // TODO : annonces individuelles
-        // TODO : annonces équipe avec multiplicateur du contrat ou sans ?
+        applyIndividualBonuses(scores);
     }
 
     private List<Player> defenseTeam() {
@@ -132,14 +130,42 @@ public class PlayedDeal extends Deal {
             result *= -1;
         result += takerCardPoints - winningFloor();
 
+        result += teamBonus(true);
+
         result *= bid.getStakeMultiplier();
 
-        for (Bonus bonus : bonuses) {
-            if (bonus.isTeamBonus())
-                result += bonus.getAddedScoreForTaker(takerWins(), bid.getStakeMultiplier());
-        }
+        result += teamBonus(false);
 
         return result;
+    }
+
+    private int teamBonus(boolean beforeMultiplier) {
+        int result = 0;
+        for (Bonus bonus : bonuses) {
+            if (bonus.isTeamBonus() && (bonus.getType().isMultiplierApplied() == beforeMultiplier))
+                result += bonus.getAddedScoreForTaker(takerWins());
+        }
+        return result;
+    }
+
+    private void applyIndividualBonuses(Map<Player, Integer> scores) {
+        for (Bonus bonus : bonuses) {
+            if (!bonus.isTeamBonus()) {
+                Player bonusPlayer = bonus.getPlayer();
+                int addedScore = bonus.getType().getBonusScore();
+                if (bonus.getType().isMultiplierApplied())
+                    addedScore *= bid.getStakeMultiplier();
+
+                for (Player player : players) {
+                    if (player.equals(bonusPlayer)) {
+                        int scoreForPlayer = addedScore * (players.size() - 1);
+                        scores.put(player, scores.get(player) + scoreForPlayer);
+                    } else {
+                        scores.put(player, scores.get(player) - addedScore);
+                    }
+                }
+            }
+        }
     }
 
     private boolean takerWins() {
