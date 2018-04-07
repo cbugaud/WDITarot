@@ -16,8 +16,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.common.collect.Lists;
-
 import java.util.List;
 import java.util.Map;
 
@@ -57,7 +55,7 @@ public class NewDealActivity extends AppCompatActivity {
     private void validate(View view) {
         String results = "";
         if (deal.completeData()) {
-            deal.computeRoundScore();
+            deal.computeDealScore();
             for (Map.Entry<Player, Integer> score : deal.getScores().entrySet())
                 results += score.getKey() + " : " + score.getValue() + "\n";
 
