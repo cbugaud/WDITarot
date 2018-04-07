@@ -22,6 +22,10 @@ public class PlayedDeal extends Deal {
     private int takerCardPoints = -1;
     private Map<Player, Integer> scores;
 
+    public PlayedDeal(List<Player> players) {
+        super(players);
+    }
+
     public Bid getBid() {
         return bid;
     }
@@ -85,7 +89,7 @@ public class PlayedDeal extends Deal {
     }
 
     public boolean completeData() {
-        return players != null && players.size() > 0
+        return players != null && players.size() >= MIN_PLAYERS_COUNT && players.size() <= MAX_PLAYERS_COUNT
                 && taker != null
                 && bid != null
                 && (players.size() != 5 || called != null && partner != null)
@@ -173,5 +177,16 @@ public class PlayedDeal extends Deal {
     }
     private int winningFloor() {
         return WINNING_FLOORS[takerOudlersCount];
+    }
+
+    @Override
+    public String toString() {
+        return "Players : "+players + "\n"
+                + "Taker : "+taker + "\n"
+                + "Bid : "+bid + "\n"
+                + "Partner : "+partner + "\n"
+                + "Called : "+called + "\n"
+                + "Oudlers count : "+takerOudlersCount + "\n"
+                + "Card points : "+takerCardPoints;
     }
 }

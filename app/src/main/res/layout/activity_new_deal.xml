@@ -9,12 +9,44 @@
         android:layout_height="match_parent"
         tools:context="fr.cbug.wditarot.NewDealActivity">
 
+        <!-- DISTRIBUTION -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/deal_dealing"
+            style="@android:style/TextAppearance.Large"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/deal_dealer"
+            style="@android:style/TextAppearance.Medium"/>
+        <RadioGroup
+            android:id="@+id/deal_dealer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+        <LinearLayout
+            android:id="@+id/deal_dummys_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/deal_dummys"
+                style="@android:style/TextAppearance.Medium"/>
+            <LinearLayout
+                android:id="@+id/deal_dummys_players_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/deal_bidding"
             style="@android:style/TextAppearance.Large"/>
-
         <!-- Qui a pris quoi -->
         <TextView
             android:layout_width="match_parent"
@@ -56,10 +88,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" />
         </LinearLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
         <TextView
             android:layout_width="match_parent"

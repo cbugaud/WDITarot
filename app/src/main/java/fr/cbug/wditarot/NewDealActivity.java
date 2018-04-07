@@ -22,6 +22,7 @@ import java.util.Map;
 import fr.cbug.wditarot.model.Bid;
 import fr.cbug.wditarot.model.Bonus;
 import fr.cbug.wditarot.model.CardColor;
+import fr.cbug.wditarot.model.Deal;
 import fr.cbug.wditarot.model.PlayedDeal;
 import fr.cbug.wditarot.model.Player;
 
@@ -38,12 +39,12 @@ public class NewDealActivity extends AppCompatActivity {
 
         this.players = (List<Player>) getIntent().getSerializableExtra(ShowScoresActivity.PLAYERS_KEY);
 
-        deal = new PlayedDeal();
-        deal.setPlayers(players);
+        deal = new PlayedDeal(players);
 
-        generateTakerButtons();
+        generateDealerButtons();
+        generateAllRealPlayersButtons();
+        manageDummys();
         generateBidButtons();
-        manageCallSection();
         generateBonusesSection();
         generateOudlersCount();
         manageScoresSection();
@@ -53,6 +54,8 @@ public class NewDealActivity extends AppCompatActivity {
     }
 
     private void validate(View view) {
+        Log.d(TAG, deal.toString());
+
         String results = "";
         if (deal.completeData()) {
             deal.computeDealScore();
@@ -65,16 +68,34 @@ public class NewDealActivity extends AppCompatActivity {
             intent.putExtra(DEAL_KEY, deal);
             setResult(RESULT_OK, intent);
             finish();
-        } else
+        } else {
             Toast.makeText(this, R.string.deal_incomplete_data, Toast.LENGTH_SHORT).show();
+        }
     }
 
-    private void generatePartnerButtons() {
-        RadioGroup takerButtonsLayout = findViewById(R.id.deal_call_partner_layout);
+    private void generateDealerButtons() {
+        ViewGroup buttonsLayout = findViewById(R.id.deal_dealer_layout);
+        buttonsLayout.removeAllViews();
 
-        for (Player player : players) {
-            Button playerButton = createButton(true, player.getName(), (view, selected) -> selectPartner(view, selected, player));
-            addToGroup(takerButtonsLayout, playerButton);
+        for (Player player : deal.getPlayers()) {
+            Button playerButton = createButton(true, player.getName(), (v, s) -> selectDealer(v, s, player));
+            addToGroup(buttonsLayout, playerButton);
+        }
+    }
+
+    private  void generateAllRealPlayersButtons() {
+        generateRealPlayersButtons(R.id.deal_taker_layout, true, this::selectTaker);
+        generateRealPlayersButtons(R.id.deal_lack_layout, false, this::addPlayerLack);
+        manageCallSection();
+    }
+
+    private void generateRealPlayersButtons(int group, boolean radio, PlayerChangedListener listener) {
+        ViewGroup buttonsLayout = findViewById(group);
+        buttonsLayout.removeAllViews();
+
+        for (Player player : deal.getPlayers()) {
+            Button playerButton = createButton(radio, player.getName(), (v, s) -> listener.playerChanged(v, s, player));
+            addToGroup(buttonsLayout, playerButton);
         }
     }
 
@@ -87,13 +108,26 @@ public class NewDealActivity extends AppCompatActivity {
         }
     }
 
-    private void generateTakerButtons() {
-        RadioGroup takerButtonsLayout = findViewById(R.id.deal_taker_layout);
+    private void manageDummys() {
+        ViewGroup dummysLayout = findViewById(R.id.deal_dummys_layout);
 
-        for (Player player : players) {
-            Button playerButton = createButton(true, player.getName(), (view, selected) -> selectTaker(view, selected, player));
-            addToGroup(takerButtonsLayout, playerButton);
+        if (players.size() <= Deal.MAX_PLAYERS_COUNT) {
+            dummysLayout.setVisibility(View.GONE);
+        } else {
+            ViewGroup dummysPlayersLayout = findViewById(R.id.deal_dummys_players_layout);
+            for (Player player : players) {
+                Button button = createButton(false, player.getName(), (view, selected) -> addDummy(view, selected, player));
+                addToGroup(dummysPlayersLayout, button);
+            }
         }
+    }
+
+    private void addDummy(CompoundButton view, boolean selected, Player player) {
+        if (selected)
+            deal.getPlayers().remove(player);
+        else if (!deal.getPlayers().contains(player))
+            deal.getPlayers().add(player);
+        generateAllRealPlayersButtons();
     }
 
     private void generateBidButtons() {
@@ -108,30 +142,20 @@ public class NewDealActivity extends AppCompatActivity {
     private void manageCallSection() {
         ViewGroup callLayout = findViewById(R.id.deal_call_layout);
 
-        if (players.size() == 5) {
+        if (deal.attackShouldHavePartner()) {
             callLayout.setVisibility(LinearLayout.VISIBLE);
             generateCalledColorButtons();
-            generatePartnerButtons();
+            generateRealPlayersButtons(R.id.deal_call_partner_layout, true, this::selectPartner);
         } else {
             callLayout.setVisibility(LinearLayout.GONE);
         }
     }
 
     private void generateBonusesSection() {
-        generateLackPlayersButtons();
         generateAttackDefButtons(R.id.deal_handful_layout, Bonus.BonusType.HANDFUL);
         generateAttackDefButtons(R.id.deal_double_handful_layout, Bonus.BonusType.DOUBLE_HANDFUL);
         generateAttackDefButtons(R.id.deal_triple_handful_layout, Bonus.BonusType.TRIPLE_HANDFUL);
         generateAttackDefButtons(R.id.deal_one_at_end_layout, Bonus.BonusType.ONE_AT_END);
-    }
-
-    private void generateLackPlayersButtons() {
-        ViewGroup lackButtonsLayout = findViewById(R.id.deal_lack_layout);
-
-        for (Player player : players) {
-            Button button = createButton(false, player.getName(), (view, selected) -> addPlayerBonus(view, selected, Bonus.BonusType.LACK, player));
-            addToGroup(lackButtonsLayout, button);
-        }
     }
 
     private void generateAttackDefButtons(int layoutId, Bonus.BonusType type) {
@@ -201,6 +225,13 @@ public class NewDealActivity extends AppCompatActivity {
         }
     }
 
+    private void selectDealer(View view, boolean selected, Player player) {
+        if (selected) {
+            deal.setDealer(player);
+            Log.d(TAG, "Dealer is "+player.getName());
+        }
+    }
+
     private void selectTaker(View view, boolean selected, Player player) {
         if (selected) {
             deal.setTaker(player);
@@ -222,7 +253,10 @@ public class NewDealActivity extends AppCompatActivity {
         }
     }
 
-    private void addPlayerBonus(CompoundButton view, boolean selected, Bonus.BonusType type, Player player) {
+    private void addPlayerLack(CompoundButton view, boolean selected, Player player) {
+        Log.d(TAG, (selected ? "Add" : "Remove") + " lack for "+player);
+        Bonus.BonusType type = Bonus.BonusType.LACK;
+
         Bonus playerBonus = null;
         for (Bonus bonus : deal.getBonuses())
             if (type.equals(bonus.getType()) && player.equals(bonus.getPlayer()))
@@ -280,5 +314,9 @@ public class NewDealActivity extends AppCompatActivity {
         ViewGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT,1);
         group.addView(button, layoutParams);
+    }
+
+    private interface PlayerChangedListener {
+        void playerChanged(CompoundButton view, boolean selected, Player player);
     }
 }

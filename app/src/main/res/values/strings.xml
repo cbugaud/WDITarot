@@ -28,4 +28,7 @@
     <string name="validate">Valider</string>
     <string name="players_empty_name">Un nom de joueur ne peut pas être vide</string>
     <string name="players_dupplicate_name">Les noms des joueurs doivent être uniques</string>
+    <string name="deal_dealer">Distributeur</string>
+    <string name="deal_dealing">Distibution</string>
+    <string name="deal_dummys">Mort(s)</string>
 </resources>
