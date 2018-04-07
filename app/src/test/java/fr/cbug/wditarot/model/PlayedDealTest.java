@@ -10,11 +10,11 @@ import static org.junit.Assert.*;
  * Created by Celine_Bugaud on 03/04/2018.
  */
 public class PlayedDealTest {
-    private static final Player SIMON = new Player();
-    private static final Player THILL = new Player();
-    private static final Player JULIEN = new Player();
-    private static final Player ERWAN = new Player();
-    private static final Player AUDE = new Player();
+    private static final Player SIMON = new Player("Simon");
+    private static final Player THILL = new Player("Thill");
+    private static final Player JULIEN = new Player("Julien");
+    private static final Player ERWAN = new Player("Erwan");
+    private static final Player AUDE = new Player("Aude");
 
     @Test
     public void computeRoundScore5Players() throws Exception {

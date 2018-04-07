@@ -19,8 +19,8 @@ public class PlayedDeal extends Deal {
     private CardColor called;
     private Player partner;
     private List<Bonus> bonuses = new ArrayList<>();
-    private int takerOudlersCount;
-    private int takerCardPoints;
+    private int takerOudlersCount = -1;
+    private int takerCardPoints = -1;
     private Map<Player, Integer> scores;
 
     public Bid getBid() {
@@ -79,6 +79,15 @@ public class PlayedDeal extends Deal {
         return scores;
     }
 
+    public boolean completeData() {
+        return players != null && players.size() > 0
+                && taker != null
+                && bid != null
+                && (players.size() != 5 || called != null && partner != null)
+                && takerOudlersCount >= 0
+                && takerCardPoints >= 0;
+    }
+
     public void computeRoundScore() {
         scores = new HashMap<>();
 
@@ -101,8 +110,13 @@ public class PlayedDeal extends Deal {
     }
 
     private List<Player> defenseTeam() {
-        return players.stream().filter(p -> !p.equals(taker) && !p.equals(partner))
-                .collect(Collectors.toList());
+        List<Player> list = new ArrayList<>();
+        for (Player p : players) {
+            if (!p.equals(taker) && !p.equals(partner)) {
+                list.add(p);
+            }
+        }
+        return list;
     }
 
     private int computeBaseScoreForTaker() {

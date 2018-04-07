@@ -1,152 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="fr.cbug.wditarot.NewDealActivity">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/deal_bidding"
-        style="@android:style/TextAppearance.Large"/>
-
-    <!-- Qui a pris -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/deal_taker"
-        style="@android:style/TextAppearance.Medium"/>
-    <RadioGroup
-        android:id="@+id/deal_taker_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" />
-
-    <!-- Contrat -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/deal_bidding"
-        style="@android:style/TextAppearance.Medium"/>
-    <RadioGroup
-        android:id="@+id/deal_bids_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" />
-
-    <!-- Qui est appelé -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/deal_callee"
-        style="@android:style/TextAppearance.Medium"/>
-    <!-- TODO : Couleur appelée en GROS pour Audrey -->
+    android:layout_height="match_parent">
     <LinearLayout
-        android:id="@+id/deal_call_color_layout"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/heart_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Coeur"
-            />
-        <Button
-            android:id="@+id/spade_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Pique"
-            />
-    </LinearLayout>
-    <!-- TODO : gestion Simonette !!!-->
-    <LinearLayout
-        android:id="@+id/deal_call_partner_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/p1_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="J1"
-            />
-        <Button
-            android:id="@+id/p2_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="J2"
-            />
-    </LinearLayout>
+        android:layout_height="match_parent"
+        tools:context="fr.cbug.wditarot.NewDealActivity">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/deal_bonuses"
-        style="@android:style/TextAppearance.Large"/>
-    <!-- Misères -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/deal_lack"
-        style="@android:style/TextAppearance.Medium"/>
-    <LinearLayout
-        android:id="@+id/deal_lack_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/m1_btn"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="J1"
-            />
-        <Button
-            android:id="@+id/m2_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="J2"
-            />
-    </LinearLayout>
-    <!-- Poignées -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/deal_handful"
-        style="@android:style/TextAppearance.Medium"/>
-    <LinearLayout
-        android:id="@+id/deal_handful_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/deal_handful_attack_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/attack"
-            />
-        <Button
-            android:id="@+id/deal_handful_defense_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/defense"
-            />
-    </LinearLayout>
-    <!-- Petit au bout -->
-    <!-- Shlem -->
+            android:text="@string/deal_bidding"
+            style="@android:style/TextAppearance.Large"/>
 
-    <!-- Nb bouts -->
-    <!-- Points -->
+        <!-- Qui a pris quoi -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/deal_taker"
+            style="@android:style/TextAppearance.Medium"/>
+        <RadioGroup
+            android:id="@+id/deal_taker_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+        <RadioGroup
+            android:id="@+id/deal_bids_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
 
-</LinearLayout>
+        <!-- Qui est appelé à quoi-->
+        <LinearLayout
+            android:id="@+id/deal_call_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/deal_callee"
+                style="@android:style/TextAppearance.Medium"/>
+            <!-- TODO : Couleur appelée en GROS pour Audrey -->
+            <RadioGroup
+                android:id="@+id/deal_call_color_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+            <!-- TODO : gestion Simonette !!!-->
+            <RadioGroup
+                android:id="@+id/deal_call_partner_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/deal_bonuses"
+            style="@android:style/TextAppearance.Large"/>
+        <!-- Misères -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/deal_lack"
+            style="@android:style/TextAppearance.Medium"/>
+        <LinearLayout
+            android:id="@+id/deal_lack_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+        <!-- Poignées -->
+        <LinearLayout
+            android:id="@+id/deal_handful_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/deal_handful"
+                style="@android:style/TextAppearance.Medium"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/deal_double_handful_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/deal_double_handful"
+                style="@android:style/TextAppearance.Medium"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/deal_triple_handful_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/deal_triple_handful"
+                style="@android:style/TextAppearance.Medium"/>
+        </LinearLayout>
+        <!-- Petit au bout -->
+        <LinearLayout
+            android:id="@+id/deal_one_at_end_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/deal_one_at_end"
+                style="@android:style/TextAppearance.Medium"/>
+        </LinearLayout>
+        <!-- Chelem -->
+        <!-- TODO : gestion des chelems ...-->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/deal_results"
+            style="@android:style/TextAppearance.Large"/>
+        <!-- Nb bouts -->
+        <RadioGroup
+            android:id="@+id/deal_nb_oudlers_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/deal_nb_oudlers"
+                style="@android:style/TextAppearance.Medium"/>
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/attack"
+                style="@android:style/TextAppearance.Medium"/>
+            <SeekBar
+                android:id="@+id/deal_attack_score_bar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:min="0"
+                android:max="91"
+                android:progress="0"/>
+            <TextView
+                android:id="@+id/deal_attack_score_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0"
+                style="@android:style/TextAppearance.Medium"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/defense"
+                style="@android:style/TextAppearance.Medium"/>
+            <SeekBar
+                android:id="@+id/deal_defense_score_bar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:min="0"
+                android:max="91"
+                android:progress="91"/>
+            <TextView
+                android:id="@+id/deal_defense_score_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="91"
+                style="@android:style/TextAppearance.Medium"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/deal_validate_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="OK"/>
+
+    </LinearLayout>
+</ScrollView>
 

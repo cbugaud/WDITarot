@@ -3,7 +3,7 @@ package fr.cbug.wditarot.model;
 /**
  * Les annonces (misère, poignées, ...
  */
-class Bonus {
+public class Bonus {
     public enum BonusType {
         LACK /** Misère */ (false, false, true, 10), // TODO : muoltiplier du contrat ?
         HANDFUL /** Poignée */ (true, true, false, 20),
@@ -45,16 +45,32 @@ class Bonus {
 
     private BonusType type;
     private Player player;
+    private boolean taker;
 
     public Bonus(BonusType type, boolean taker) {
         this.type = type;
         this.taker = taker;
     }
 
-    private boolean taker;
+    public Bonus(BonusType type, Player player) {
+        this.type = type;
+        this.taker = taker;
+    }
+
+    public BonusType getType() {
+        return type;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
 
     public boolean isTeamBonus() {
         return type.isTeam();
+    }
+
+    public boolean isTaker() {
+        return taker;
     }
 
     public int getAddedScoreForTaker(boolean takerWins, int stakeMultiplier) {

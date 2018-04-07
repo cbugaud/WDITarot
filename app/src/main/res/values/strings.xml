@@ -8,10 +8,20 @@
     <string name="deal_bonuses">Annonces</string>
     <string name="deal_lack">Misère</string>
     <string name="deal_handful">Poignée</string>
+    <string name="deal_double_handful">Double</string>
+    <string name="deal_triple_handful">Triple</string>
     <string name="attack">Attaque</string>
     <string name="defense">Défense</string>
     <string name="bid_take">Prise</string>
     <string name="bid_guard">Garde</string>
     <string name="bid_guard_without">Garde sans</string>
     <string name="bid_guard_against">Garde contre</string>
+    <string name="heart">Coeur</string>
+    <string name="diamond">Carreau</string>
+    <string name="spade">Pique</string>
+    <string name="club">Trêfle</string>
+    <string name="deal_one_at_end">Petit au bout</string>
+    <string name="deal_results">Résultats</string>
+    <string name="deal_nb_oudlers">Nb bouts</string>
+    <string name="deal_incomplete_data">Il manque des infos pour calculer les scores ...</string>
 </resources>
