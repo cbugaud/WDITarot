@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">WDITarot</string>
 
+    <string name="new_deal_title">Nouvelle donne</string>
     <string name="deal_taker">Preneur</string>
     <string name="deal_bidding">Contrat</string>
     <string name="action_settings">Settings</string>
@@ -24,6 +25,8 @@
     <string name="deal_results">Résultats</string>
     <string name="deal_nb_oudlers">Nb bouts</string>
     <string name="deal_incomplete_data">Il manque des infos pour calculer les scores ...</string>
+    <string name="choose_players_title">Joueurs</string>
+    <string name="player">Joueur</string>
     <string name="add">Ajouter</string>
     <string name="validate">Valider</string>
     <string name="players_empty_name">Un nom de joueur ne peut pas être vide</string>
@@ -31,4 +34,5 @@
     <string name="deal_dealer">Distributeur</string>
     <string name="deal_dealing">Distibution</string>
     <string name="deal_dummys">Mort(s)</string>
+    <string name="show_scores_title">Scores</string>
 </resources>

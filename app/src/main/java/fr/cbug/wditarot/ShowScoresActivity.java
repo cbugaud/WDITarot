@@ -19,6 +19,7 @@ import fr.cbug.wditarot.model.Player;
 
 public class ShowScoresActivity extends AppCompatActivity {
     public static final String PLAYERS_KEY = "players";
+    public static final String GAME_KEY = "game";
     public static final int ACT_NEWDEAL = 1;
     private Game game;
 
@@ -27,7 +28,19 @@ public class ShowScoresActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_scores);
 
-        game = new Game((List<Player>) getIntent().getSerializableExtra(PLAYERS_KEY));
+        if (savedInstanceState == null) {
+            final List<Player> players = (List<Player>) getIntent().getSerializableExtra(PLAYERS_KEY);
+            if (players != null) {
+                // on vient de l'écran de choix des joueurs
+                game = new Game(players);
+            } else {
+                // on vient d'un écran enfant sur lequel on a fait un retour
+                game = (Game) getIntent().getSerializableExtra(GAME_KEY);
+            }
+        } else {
+            // le système reconstruit l'écran à partir d'un état précédent (ex. rotation de l'écran)
+            game = (Game) savedInstanceState.getSerializable(GAME_KEY);
+        }
 
         populateScoreGrid();
 
@@ -89,7 +102,7 @@ public class ShowScoresActivity extends AppCompatActivity {
 
     private void newDeal(View view) {
         Intent intent = new Intent().setClass(view.getContext(), NewDealActivity.class);
-        intent.putExtra(PLAYERS_KEY, (Serializable) game.getPlayers());
+        intent.putExtra(GAME_KEY, game);
         startActivityForResult(intent, ACT_NEWDEAL);
     }
 
@@ -99,5 +112,11 @@ public class ShowScoresActivity extends AppCompatActivity {
             Deal newDeal = (Deal) data.getSerializableExtra(NewDealActivity.DEAL_KEY);
             game.addDeal(0, newDeal);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(GAME_KEY, game);
     }
 }

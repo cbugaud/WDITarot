@@ -18,11 +18,14 @@ import fr.cbug.wditarot.model.Player;
 public class ChoosePlayersActivity extends AppCompatActivity {
     private static final int DEFAULT_PLAYERS_COUNT = 3;
 
+    private int playersCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_players);
 
+        playersCount = 0;
         generateDefaultEdits();
 
         Button addBtn = findViewById(R.id.players_add_player);
@@ -69,6 +72,8 @@ public class ChoosePlayersActivity extends AppCompatActivity {
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         edit.setLayoutParams(layoutParams);
+        playersCount++;
+        edit.setHint(getResources().getString(R.string.player) + " " + playersCount);
 
         group.addView(edit);
     }

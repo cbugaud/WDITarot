@@ -19,9 +19,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NewDealActivity" />
-        <activity android:name=".ShowScoresActivity" />
-        <activity android:name=".ChoosePlayersActivity"></activity>
+        <activity
+            android:name=".NewDealActivity"
+            android:parentActivityName=".ShowScoresActivity"
+            android:label="@string/new_deal_title" />
+        <activity
+            android:name=".ShowScoresActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="@string/show_scores_title" />
+        <activity
+            android:name=".ChoosePlayersActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="@string/choose_players_title" />
     </application>
 
 </manifest>

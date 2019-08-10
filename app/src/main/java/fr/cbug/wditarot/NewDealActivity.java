@@ -1,8 +1,8 @@
 package fr.cbug.wditarot;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +16,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -23,13 +25,14 @@ import fr.cbug.wditarot.model.Bid;
 import fr.cbug.wditarot.model.Bonus;
 import fr.cbug.wditarot.model.CardColor;
 import fr.cbug.wditarot.model.Deal;
+import fr.cbug.wditarot.model.Game;
 import fr.cbug.wditarot.model.PlayedDeal;
 import fr.cbug.wditarot.model.Player;
 
 public class NewDealActivity extends AppCompatActivity {
     private static final String TAG = "newDealActivity";
     public static final String DEAL_KEY = "deal";
-    private List<Player> players;
+    private Game game;
     private PlayedDeal deal;
 
     @Override
@@ -37,9 +40,13 @@ public class NewDealActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_deal);
 
-        this.players = (List<Player>) getIntent().getSerializableExtra(ShowScoresActivity.PLAYERS_KEY);
-
-        deal = new PlayedDeal(players);
+        if (savedInstanceState == null) {
+            game = (Game) getIntent().getSerializableExtra(ShowScoresActivity.GAME_KEY);
+            deal = new PlayedDeal(game.getPlayers());
+        } else {
+            deal = (PlayedDeal) savedInstanceState.getSerializable(DEAL_KEY);
+            game = (Game) savedInstanceState.getSerializable(ShowScoresActivity.GAME_KEY);
+        }
 
         generateDealerButtons();
         generateAllRealPlayersButtons();
@@ -78,32 +85,49 @@ public class NewDealActivity extends AppCompatActivity {
         buttonsLayout.removeAllViews();
 
         for (Player player : deal.getPlayers()) {
-            Button playerButton = createButton(true, player.getName(), (v, s) -> selectDealer(v, s, player));
+            Button playerButton = createButton(true, player.getName(), player.equals(deal.getDealer()),
+                    (v, s) -> selectDealer(v, s, player));
             addToGroup(buttonsLayout, playerButton);
         }
     }
 
     private  void generateAllRealPlayersButtons() {
-        generateRealPlayersButtons(R.id.deal_taker_layout, true, this::selectTaker);
-        generateRealPlayersButtons(R.id.deal_lack_layout, false, this::addPlayerLack);
+
+        List<Player> lackPlayers = new ArrayList<>();
+        for (Bonus bonus : deal.getBonuses()) {
+            if (bonus.getType() == Bonus.BonusType.LACK) {
+                lackPlayers.add(bonus.getPlayer());
+            }
+        }
+
+        generateRealPlayersButtons(R.id.deal_taker_layout, true, this::selectTaker, deal.getTaker());
+        generateRealPlayersButtons(R.id.deal_lack_layout, false, this::addPlayerLack, lackPlayers);
         manageCallSection();
     }
 
-    private void generateRealPlayersButtons(int group, boolean radio, PlayerChangedListener listener) {
+    private void generateRealPlayersButtons(int group, boolean radio, PlayerChangedListener listener,
+                                            List<Player> selectedPlayers) {
         ViewGroup buttonsLayout = findViewById(group);
         buttonsLayout.removeAllViews();
 
         for (Player player : deal.getPlayers()) {
-            Button playerButton = createButton(radio, player.getName(), (v, s) -> listener.playerChanged(v, s, player));
+            Button playerButton = createButton(radio, player.getName(), selectedPlayers.contains(player),
+                    (v, s) -> listener.playerChanged(v, s, player));
             addToGroup(buttonsLayout, playerButton);
         }
+    }
+
+    private void generateRealPlayersButtons(int group, boolean radio, PlayerChangedListener listener,
+                                            Player selectedPlayer) {
+        generateRealPlayersButtons(group, radio, listener, Collections.singletonList(selectedPlayer));
     }
 
     private void generateCalledColorButtons() {
         RadioGroup colorButtonsLayout = findViewById(R.id.deal_call_color_layout);
 
         for (CardColor color : CardColor.values()) {
-            Button button = createButton(true, color.getLabelRes(), (view, selected) -> selectCalledColor(view, selected, color));
+            Button button = createButton(true, color.getLabelRes(), color.equals(deal.getCalled()),
+                    (view, selected) -> selectCalledColor(view, selected, color));
             addToGroup(colorButtonsLayout, button);
         }
     }
@@ -111,12 +135,13 @@ public class NewDealActivity extends AppCompatActivity {
     private void manageDummys() {
         ViewGroup dummysLayout = findViewById(R.id.deal_dummys_layout);
 
-        if (players.size() <= Deal.MAX_PLAYERS_COUNT) {
+        if (game.getPlayers().size() <= Deal.MAX_PLAYERS_COUNT) {
             dummysLayout.setVisibility(View.GONE);
         } else {
             ViewGroup dummysPlayersLayout = findViewById(R.id.deal_dummys_players_layout);
-            for (Player player : players) {
-                Button button = createButton(false, player.getName(), (view, selected) -> addDummy(view, selected, player));
+            for (Player player : game.getPlayers()) {
+                Button button = createButton(false, player.getName(), !deal.getPlayers().contains(player),
+                        (view, selected) -> addDummy(view, selected, player));
                 addToGroup(dummysPlayersLayout, button);
             }
         }
@@ -134,7 +159,8 @@ public class NewDealActivity extends AppCompatActivity {
         RadioGroup bidButtonsLayout = findViewById(R.id.deal_bids_layout);
 
         for (Bid bid : Bid.values()) {
-            Button button = createButton(true, bid.getLabel(), (view, selected) -> selectBid(view, selected, bid));
+            Button button = createButton(true, bid.getLabel(), bid.equals(deal.getBid()),
+                    (view, selected) -> selectBid(view, selected, bid));
             addToGroup(bidButtonsLayout, button);
         }
     }
@@ -145,7 +171,7 @@ public class NewDealActivity extends AppCompatActivity {
         if (deal.attackShouldHavePartner()) {
             callLayout.setVisibility(LinearLayout.VISIBLE);
             generateCalledColorButtons();
-            generateRealPlayersButtons(R.id.deal_call_partner_layout, true, this::selectPartner);
+            generateRealPlayersButtons(R.id.deal_call_partner_layout, true, this::selectPartner, deal.getPartner());
         } else {
             callLayout.setVisibility(LinearLayout.GONE);
         }
@@ -159,9 +185,23 @@ public class NewDealActivity extends AppCompatActivity {
     }
 
     private void generateAttackDefButtons(int layoutId, Bonus.BonusType type) {
+
+        boolean attackBonus = false;
+        boolean defenseBonus = false;
+        for (Bonus bonus : deal.getBonuses()) {
+            if (bonus.getType() == type) {
+                if (bonus.isTaker())
+                    attackBonus = true;
+                else
+                    defenseBonus = true;
+            }
+        }
+
         ViewGroup layout = findViewById(layoutId);
-        Button attack = createButton(false, R.string.attack, (view, selected) -> addTeamBonus(view, selected, type, true));
-        Button defense = createButton(false, R.string.defense, (view, selected) -> addTeamBonus(view, selected, type, false));
+        Button attack = createButton(false, R.string.attack, attackBonus,
+                (view, selected) -> addTeamBonus(view, selected, type, true));
+        Button defense = createButton(false, R.string.defense, defenseBonus,
+                (view, selected) -> addTeamBonus(view, selected, type, false));
         addToGroup(layout, attack);
         addToGroup(layout, defense);
     }
@@ -170,7 +210,7 @@ public class NewDealActivity extends AppCompatActivity {
         ViewGroup layout = findViewById(R.id.deal_nb_oudlers_layout);
         for (int i = 0; i <= 3; i++) {
             final int oudlerCount = i;
-            Button btn = createButton(true, String.valueOf(oudlerCount),
+            Button btn = createButton(true, String.valueOf(oudlerCount), i == deal.getTakerOudlersCount(),
                     (view, selected) -> selectOudlersCount(view, selected, oudlerCount));
             addToGroup(layout, btn);
         }
@@ -182,6 +222,15 @@ public class NewDealActivity extends AppCompatActivity {
 
         SeekBar attackSeekBar = findViewById(R.id.deal_attack_score_bar);
         TextView attackText = findViewById(R.id.deal_attack_score_text);
+
+        if (deal.getTakerCardPoints() != -1) {
+            final int defenseScore = 91 - deal.getTakerCardPoints();
+            defenseSeekBar.setProgress(defenseScore);
+            defenseText.setText(String.valueOf(defenseScore));
+
+            attackSeekBar.setProgress(deal.getTakerCardPoints());
+            attackText.setText(String.valueOf(deal.getTakerCardPoints()));
+        }
 
         defenseSeekBar.setOnSeekBarChangeListener(new ScoreBarListener(false, defenseText, attackSeekBar, attackText));
         attackSeekBar.setOnSeekBarChangeListener(new ScoreBarListener(true, attackText, defenseSeekBar, defenseText));
@@ -292,21 +341,25 @@ public class NewDealActivity extends AppCompatActivity {
         }
     }
 
-    private Button createButton(boolean radio, String text, CompoundButton.OnCheckedChangeListener listener) {
-        Button button = createButton(radio, listener);
+    private Button createButton(boolean radio, String text, boolean isSelected,
+                                CompoundButton.OnCheckedChangeListener listener) {
+        Button button = createButton(radio, isSelected, listener);
         button.setText(text);
         return button;
     }
-    private Button createButton(boolean radio, int textResId, CompoundButton.OnCheckedChangeListener listener) {
-        Button button = createButton(radio, listener);
+    private Button createButton(boolean radio, int textResId, boolean isSelected,
+                                CompoundButton.OnCheckedChangeListener listener) {
+        Button button = createButton(radio, isSelected, listener);
         button.setText(textResId);
         return button;
     }
-    private Button createButton(boolean radio, CompoundButton.OnCheckedChangeListener listener) {
+    private Button createButton(boolean radio, boolean isSelected, CompoundButton.OnCheckedChangeListener listener) {
         CompoundButton button = radio ? new RadioButton(this) : new CheckBox(this);
         button.setOnCheckedChangeListener(listener);
         button.setBackgroundResource(R.drawable.my_radio_button_background);
         button.setButtonDrawable(null);
+        button.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        button.setPressed(isSelected);
         return button;
     }
 
@@ -318,5 +371,21 @@ public class NewDealActivity extends AppCompatActivity {
 
     private interface PlayerChangedListener {
         void playerChanged(CompoundButton view, boolean selected, Player player);
+    }
+
+    @Override
+    public Intent getParentActivityIntent() {
+        Intent intent = super.getParentActivityIntent();
+        if (intent != null) {
+            intent.putExtra(ShowScoresActivity.GAME_KEY, game);
+        }
+        return intent;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(DEAL_KEY, deal);
+        outState.putSerializable(ShowScoresActivity.GAME_KEY, game);
     }
 }
